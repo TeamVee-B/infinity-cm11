@@ -20,11 +20,9 @@
     <ctl name="Voip Evrc Min Max Rate Config" id="1" value="4" />
     <ctl name="Voip Dtx Mode" value="0" />
     <ctl name="TTY Mode" value="Off" />
-    <!-- Kevin Shiu modify analog gain -->
-    <ctl name="HPHL Volume" value="12" />
-    <ctl name="HPHR Volume" value="12" />
-    <ctl name="LINEOUT Volume" value="12" />
-    <!-- Kevin Shiu end -->
+    <ctl name="HPHL Volume" value="9" />
+    <ctl name="HPHR Volume" value="9" />
+    <ctl name="LINEOUT Volume" value="9" />
     <ctl name="RX1 Digital Volume" value="84" />
     <ctl name="RX2 Digital Volume" value="84" />
     <ctl name="RX3 Digital Volume" value="84" />
@@ -32,11 +30,8 @@
     <ctl name="IIR1 INP2 Volume" value="84" />
     <ctl name="IIR1 INP3 Volume" value="84" />
     <ctl name="IIR1 INP4 Volume" value="84" />
-    <!-- Kevin Shiu initial analog gain to 18dB -->
-    <ctl name="ADC1 Volume" value="12" />
-    <ctl name="ADC2 Volume" value="12" />
-    <ctl name="ADC3 Volume" value="12" /> 
-    <!-- Kevin Shiu end -->
+    <ctl name="ADC1 Volume" value="13" />
+    <ctl name="ADC2 Volume" value="13" />
     <ctl name="DEC1 Volume" value="84" />
     <ctl name="DEC2 Volume" value="84" />
     <ctl name="DEC2 MUX" value="ZERO" />
@@ -435,22 +430,11 @@
     <path name="adc2">
         <ctl name="DEC1 MUX" value="ADC2" />
     </path>
-    
-    <!-- Kevin Shiu 20140121 adjust RX digital volume -->
+
     <path name="speaker">
         <ctl name="RX3 MIX1 INP1" value="RX1" />
         <ctl name="SPK DAC Switch" value="1" />
-        <ctl name="RX3 Digital Volume" value="93" />
     </path>
-    <!-- Kevin Shiu end -->
-    
-    <!-- Kevin Shiu xLOUD feature -->
-    <path name="xloud-speaker">
-        <ctl name="RX3 MIX1 INP1" value="RX1" />
-        <ctl name="SPK DAC Switch" value="1" />
-        <ctl name="RX3 Digital Volume" value="90" />
-    </path>
-    <!-- Kevin Shiu end -->
 
     <path name="speaker-skuab">
         <ctl name="RX3 MIX1 INP1" value="RX1" />
@@ -464,47 +448,27 @@
 
     <path name="handset">
         <ctl name="RX1 MIX1 INP1" value="RX1" />
-        <ctl name="RX1 Digital Volume" value="93" />
+        <ctl name="RX1 Digital Volume" value="84" />
         <ctl name="DAC1 Switch" value="1" />
     </path>
-    
-    <!-- Kevin Shiu add a line IIR1 INP1 MUX -->
-    <!-- Kevin Shiu set analog gain to 18 dB for recording -->
+
     <path name="handset-mic">
         <path name="adc1" />
-        <ctl name="ADC1 Volume" value="12" />
-        <ctl name="IIR1 INP1 MUX" value="DEC1" />
     </path>
-    <!-- Kevin Shiu end -->
-    
-    <!-- Kevin Shiu add for 2nd MIC -->
-    <path name="back-mic">
-        <path name="adc2" />
-        <ctl name="ADC2 MUX" value="INP3" />
-        <ctl name="ADC3 Volume" value="12" />
-    </path>
-    <!-- Kevin Shiu end -->
-    
-    <!-- Kevin Shiu 20140121 adjust RX digital volume -->
+
     <path name="headphones">
         <ctl name="MI2S_RX Channels" value="Two" />
         <ctl name="RX1 MIX1 INP1" value="RX1" />
         <ctl name="RX2 MIX1 INP1" value="RX2" />
         <ctl name="HPHL DAC Switch" value="1" />
-        <ctl name="RX1 Digital Volume" value="93" />
-        <ctl name="RX2 Digital Volume" value="93" />
     </path>
-    <!-- Kevin Shiu end -->
-    
-    <!-- Kevin Shiu set analog gain to 18 dB for recording -->
+
     <path name="headset-mic">
         <path name="adc2" />
         <ctl name="ADC2 MUX" value="INP2" />
         <ctl name="IIR1 INP1 MUX" value="DEC1" />
-        <ctl name="ADC2 Volume" value="12" />
     </path>
-    <!-- Kevin Shiu end -->
-            
+
     <path name="sidetone-iir">
         <ctl name="IIR1 Enable Band1" value="1" />
         <ctl name="IIR1 Enable Band2" value="1" />
@@ -513,53 +477,24 @@
         <ctl name="IIR1 Enable Band5" value="1" />
     </path>
 
-    <!-- Kevin Shiu change sidetone volume from 53 to 78 -->
     <path name="sidetone-handset">
         <path name="sidetone-iir" />
-        <ctl name="IIR1 INP1 MUX" value="DEC1" />
-        <ctl name="IIR1 INP1 Volume" value="78" />
+        <ctl name="IIR1 INP1 Volume" value="53" />
         <ctl name="RX1 MIX2 INP1" value="IIR1" />
     </path>
-    <!-- Kevin Shiu end -->
 
-    <!-- Kevin Shiu change sidetone volume from 53 to 25 -->
     <path name="sidetone-headphone">
         <path name="sidetone-iir" />
         <ctl name="RX1 MIX2 INP1" value="IIR1" />
         <ctl name="RX2 MIX2 INP1" value="IIR1" />
-        <ctl name="IIR1 INP1 Volume" value="25" />
+        <ctl name="IIR1 INP1 Volume" value="53" />
     </path>
-    <!-- Kevin Shiu end -->
-    
+
     <path name="voice-handset">
         <path name="sidetone-handset" />
         <path name="handset" />
     </path>
-    
-    <!-- Kevin Shiu implement FP16310's EQ feature for voice call -->
-    <path name="voice-handset-eq1">
-        <path name="sidetone-handset" />
-        <path name="handset" />
-    </path>
-    <!-- Kevin Shiu end -->
-    
-    <!-- Kevin Shiu implement FP16310's EQ feature for voice call -->
-    <path name="voice-handset-eq2">
-        <path name="sidetone-handset" />
-        <path name="handset" />
-    </path>
-    <!-- Kevin Shiu end -->
-    
-    <!-- Kevin Shiu choose FV5 SM oalgorithm for handset voice call -->
-    <!-- Kevin Shiu add a line IIR1 INP1 MUX -->
-    <!-- Kevin Shiu set analog gain to 12 dB for FV5 -->
-    <path name="voice-handset-mic-fv5-sm">
-        <path name="adc1" />
-        <ctl name="IIR1 INP1 MUX" value="DEC1" />
-        <ctl name="ADC1 Volume" value="8" />
-    </path>
-    <!-- Kevin Shiu end -->
-    
+
     <path name="voice-speaker">
         <path name="speaker" />
     </path>
@@ -567,62 +502,20 @@
     <path name="voice-speaker-mic">
         <path name="speaker-mic" />
     </path>
-    
-    <!-- Kevin Shiu choose FV5 SM oalgorithm for speaker voice call -->
-    <!-- Kevin Shiu set analog gain to 12 dB for recording -->
-    <path name="voice-speaker-mic-fv5-sm">
-        <path name="speaker-mic" />
-        <ctl name="ADC1 Volume" value="8" />
-    </path>
-    <!-- Kevin Shiu end -->
 
     <path name="voice-headphones">
         <path name="headphones" />
         <path name="sidetone-headphone" />
     </path>
 
-    <!-- Kevin Shiu implement FP16310's EQ feature for voice call -->
-    <path name="voice-headphones-eq1">
-        <path name="headphones" />
-        <path name="sidetone-headphone" />
-    </path>
-    <!-- Kevin Shiu end -->
-    
-    <!-- Kevin Shiu implement FP16310's EQ feature for voice call -->
-    <path name="voice-headphones-eq2">
-        <path name="headphones" />
-        <path name="sidetone-headphone" />
-    </path>
-    <!-- Kevin Shiu end -->
-        
     <path name="voice-headset-mic">
         <path name="headset-mic" />
     </path>
 
-    <!-- Kevin Shiu choose FV5 SM algorithm for headset vocie call -->
-    <path name="voice-headset-mic-fv5-sm">
-        <path name="adc2" />
-        <ctl name="ADC2 MUX" value="INP2" />
-        <ctl name="IIR1 INP1 MUX" value="DEC1" />
-        <ctl name="ADC2 Volume" value="8" />
-    </path>
-    <!-- Kevin Shiu end -->
-
-    <!-- Kevin Shiu 20140121 adjust RX digital volume -->
-    <!-- <path name="speaker" /> -->
-    <!-- <path name="headphones" /> -->
     <path name="speaker-and-headphones">
-        <ctl name="RX3 MIX1 INP1" value="RX1" />
-        <ctl name="SPK DAC Switch" value="1" />
-        <ctl name="MI2S_RX Channels" value="Two" />
-        <ctl name="RX1 MIX1 INP1" value="RX1" />
-        <ctl name="RX2 MIX1 INP1" value="RX2" />
-        <ctl name="HPHL DAC Switch" value="1" />
-        <ctl name="RX1 Digital Volume" value="93" />
-        <ctl name="RX2 Digital Volume" value="93" />
-        <ctl name="RX3 Digital Volume" value="87" />
+        <path name="speaker" />
+        <path name="headphones" />
     </path>
-    <!-- Kevin Shiu end -->
 
     <path name="speaker-and-headphones-skuab">
         <path name="speaker-skuab" />
@@ -679,15 +572,9 @@
         <path name="dmic-endfire" />
     </path>
 
-    <!-- Kevin Shiu set analog gain to 12 dB for voice call -->
     <path name="voice-dmic-ef">
         <path name="dmic-endfire" />
-        <ctl name="DEC1 Volume" value="84" />
-        <ctl name="DEC2 Volume" value="87" />
-        <ctl name="ADC1 Volume" value="8" />
-        <ctl name="ADC3 Volume" value="8" />
     </path>
-    <!-- Kevin Shiu end -->
 
     <path name="voice-speaker-dmic-ef">
         <path name="dmic-endfire" />
@@ -701,20 +588,12 @@
         <path name="dmic-endfire" />
     </path>
 
-    <!-- Kevin Shiu set analog gain to 18 dB for voice call -->
     <path name="handset-stereo-dmic-ef">
         <path name="speaker-dmic-endfire" />
-        <ctl name="ADC1 Volume" value="12" />
-        <ctl name="ADC3 Volume" value="12" />
     </path>
-    <!-- Kevin Shiu end -->
-    
-    <!-- Kevin Shiu set analog gain to 18 dB for voice call -->
+
     <path name="speaker-stereo-dmic-ef">
         <path name="speaker-dmic-endfire" />
-        <ctl name="ADC1 Volume" value="12" />
-        <ctl name="ADC3 Volume" value="12" />
-		<!-- Kevin Shiu end -->
     </path>
 
     <!-- TTY devices -->

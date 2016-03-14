@@ -1,6 +1,16 @@
-assert(getprop("ro.product.device") == "falconss" ||
+assert(getprop("ro.product.device") == "D2004" ||
+       getprop("ro.build.product") == "D2004" || 
+       getprop("ro.product.device") == "D2005" ||
+       getprop("ro.build.product") == "D2005" || 
+       getprop("ro.product.device") == "D2104" ||
+       getprop("ro.build.product") == "D2104" || 
+       getprop("ro.product.device") == "D2105" ||
+       getprop("ro.build.product") == "D2105" || 
+       getprop("ro.product.device") == "D2114" ||
+       getprop("ro.build.product") == "D2114" || 
+       getprop("ro.product.device") == "falconss" ||
        getprop("ro.build.product") == "falconss" ||
-       abort("This package is for device: falconss; this device is " + getprop("ro.product.device") + "."););
+       abort("This package is for device: D2004,D2005,D2104,D2105,D2114,falconss; this device is " + getprop("ro.product.device") + "."););
 mount("ext4", "EMMC", "/dev/block/platform/msm_sdcc.1/by-name/system", "/system");
 package_extract_file("system/bin/backuptool.sh", "/tmp/backuptool.sh");
 package_extract_file("system/bin/backuptool.functions", "/tmp/backuptool.functions");
@@ -8,30 +18,20 @@ set_metadata("/tmp/backuptool.sh", "uid", 0, "gid", 0, "mode", 0755);
 set_metadata("/tmp/backuptool.functions", "uid", 0, "gid", 0, "mode", 0644);
 run_program("/tmp/backuptool.sh", "backup");
 unmount("/system");
-
 show_progress(0.500000, 0);
-mount("f2fs", "EMMC", "/dev/block/platform/msm_sdcc.1/by-name/userdata", "/data");
+mount("ext4", "EMMC", "/dev/block/platform/msm_sdcc.1/by-name/userdata", "/data");
 package_extract_file("system/bin/otasigcheck.sh", "/tmp/otasigcheck.sh");
 package_extract_file("META-INF/org/cyanogenmod/releasekey", "/tmp/releasekey");
 set_metadata("/tmp/otasigcheck.sh", "uid", 0, "gid", 0, "mode", 0755);
 run_program("/tmp/otasigcheck.sh");
+sha1_check(read_file("/tmp/releasekey"),"7241e92725436afc79389d4fc2333a2aa8c20230") && abort("Can't install this package on top of incompatible data. Please try another package or run a factory reset");
 unmount("/data");
-
-ui_print("Formatting system...");
 format("ext4", "EMMC", "/dev/block/platform/msm_sdcc.1/by-name/system", "0", "/system");
-
-ui_print("Mount system...");
 mount("ext4", "EMMC", "/dev/block/platform/msm_sdcc.1/by-name/system", "/system");
-
-ui_print("Extracting system files...");
+package_extract_dir("recovery", "/system");
 package_extract_dir("system", "/system");
-
-ui_print("Symlinks system...");
 symlink("../bin/fsck.f2fs", "/system/bin/dump.f2fs");
 symlink("../xbin/su", "/system/bin/su");
-symlink("/data/misc/wifi/softmac", "/system/etc/firmware/wlan/prima/softmac");
-symlink("/data/misc/wifi/WCNSS_qcom_cfg.ini", "/system/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini");
-symlink("/data/misc/wifi/WCNSS_qcom_wlan_nv.bin", "/system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin");
 symlink("/system/lib/modules/pronto/pronto_wlan.ko", "/system/lib/modules/wlan.ko");
 symlink("Roboto-Bold.ttf", "/system/fonts/DroidSans-Bold.ttf");
 symlink("Roboto-Regular.ttf", "/system/fonts/DroidSans.ttf");
@@ -158,6 +158,7 @@ set_metadata("/system/bin/debuggerd", "uid", 0, "gid", 2000, "mode", 0755, "capa
 set_metadata("/system/bin/dhcpcd", "uid", 0, "gid", 2000, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:dhcp_exec:s0");
 set_metadata("/system/bin/dnsmasq", "uid", 0, "gid", 2000, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:dnsmasq_exec:s0");
 set_metadata("/system/bin/drmserver", "uid", 0, "gid", 2000, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:drmserver_exec:s0");
+set_metadata("/system/bin/hci_qcomm_init", "uid", 0, "gid", 2000, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:hci_exec:s0");
 set_metadata("/system/bin/hostapd", "uid", 0, "gid", 2000, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:hostapd_exec:s0");
 set_metadata("/system/bin/installd", "uid", 0, "gid", 2000, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:installd_exec:s0");
 set_metadata("/system/bin/keystore", "uid", 0, "gid", 2000, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:keystore_exec:s0");
@@ -174,6 +175,7 @@ set_metadata("/system/bin/run-as", "uid", 0, "gid", 2000, "mode", 0750, "capabil
 set_metadata("/system/bin/sdcard", "uid", 0, "gid", 2000, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:sdcardd_exec:s0");
 set_metadata("/system/bin/servicemanager", "uid", 0, "gid", 2000, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:servicemanager_exec:s0");
 set_metadata("/system/bin/surfaceflinger", "uid", 0, "gid", 2000, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:surfaceflinger_exec:s0");
+set_metadata("/system/bin/uncrypt", "uid", 0, "gid", 0, "mode", 0750, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
 set_metadata("/system/bin/vold", "uid", 0, "gid", 2000, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:vold_exec:s0");
 set_metadata("/system/bin/wpa_supplicant", "uid", 0, "gid", 2000, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:wpa_exec:s0");
 set_metadata_recursive("/system/etc/dhcpcd", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:dhcp_system_file:s0");
@@ -186,27 +188,22 @@ set_metadata("/system/recovery-from-boot.p", "uid", 0, "gid", 0, "mode", 0644, "
 set_metadata("/system/vendor", "uid", 0, "gid", 2000, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
 set_metadata_recursive("/system/vendor/etc", "uid", 0, "gid", 2000, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
 set_metadata("/system/vendor/etc/audio_effects.conf", "uid", 0, "gid", 0, "mode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-set_metadata_recursive("/system/vendor/firmware", "uid", 0, "gid", 2000, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
+set_metadata("/system/vendor/firmware", "uid", 0, "gid", 2000, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
+set_metadata("/system/vendor/firmware/keymaster", "uid", 0, "gid", 2000, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
 set_metadata("/system/vendor/lib", "uid", 0, "gid", 2000, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-set_metadata_recursive("/system/vendor/lib/drm", "uid", 0, "gid", 2000, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-set_metadata("/system/vendor/lib/drm/libdrmwvmplugin.so", "uid", 0, "gid", 0, "mode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
 set_metadata("/system/vendor/lib/egl", "uid", 0, "gid", 2000, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
 set_metadata_recursive("/system/vendor/lib/hw", "uid", 0, "gid", 2000, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-set_metadata("/system/vendor/lib/hw/power.qcom.so", "uid", 0, "gid", 0, "mode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
+set_metadata("/system/vendor/lib/hw/power.msm8610.so", "uid", 0, "gid", 0, "mode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
 set_metadata_recursive("/system/vendor/lib/mediadrm", "uid", 0, "gid", 2000, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
 set_metadata("/system/vendor/lib/mediadrm/libwvdrmengine.so", "uid", 0, "gid", 0, "mode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-set_metadata("/system/vendor/lib/rfsa", "uid", 0, "gid", 2000, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-set_metadata("/system/vendor/lib/rfsa/adsp", "uid", 0, "gid", 2000, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
-set_metadata("/system/vendor/lib/soundfx", "uid", 0, "gid", 2000, "mode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
 set_metadata_recursive("/system/xbin", "uid", 0, "gid", 2000, "dmode", 0755, "fmode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
 set_metadata("/system/xbin/librank", "uid", 0, "gid", 0, "mode", 06755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
 set_metadata("/system/xbin/procmem", "uid", 0, "gid", 0, "mode", 06755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
 set_metadata("/system/xbin/procrank", "uid", 0, "gid", 0, "mode", 06755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
 set_metadata("/system/xbin/su", "uid", 0, "gid", 0, "mode", 06755, "capabilities", 0x0, "selabel", "u:object_r:su_exec:s0");
-
+set_metadata("/system/xbin/tcpdump", "uid", 0, "gid", 0, "mode", 06755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
 show_progress(0.200000, 0);
 delete("/system/bin/otasigcheck.sh");
-
 show_progress(0.200000, 10);
 package_extract_file("system/bin/backuptool.sh", "/tmp/backuptool.sh");
 package_extract_file("system/bin/backuptool.functions", "/tmp/backuptool.functions");
@@ -215,16 +212,7 @@ set_metadata("/tmp/backuptool.functions", "uid", 0, "gid", 0, "mode", 0644);
 run_program("/tmp/backuptool.sh", "restore");
 delete("/system/bin/backuptool.sh");
 delete("/system/bin/backuptool.functions");
-
 show_progress(0.200000, 10);
-ui_print("Flashing boot.img...");
 package_extract_file("boot.img", "/dev/block/platform/msm_sdcc.1/by-name/boot");
-
 show_progress(0.100000, 0);
-ui_print("");
-ui_print("");
-ui_print("");
-ui_print("+++++++++++++++++++++++");
-ui_print("Let's Now ");
-ui_print("ROMS Cyanogenmod11_Beta ");
 unmount("/system");
